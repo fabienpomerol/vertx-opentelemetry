@@ -1,5 +1,6 @@
 package examples;
 
+import io.opentelemetry.sdk.trace.Samplers;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.github.fabienpomerol.vertx.tracing.opentelemetry.OpenTelemetryOptions;
@@ -31,6 +32,7 @@ public class OpenTelemetryExamples {
             .setIp("127.0.0.1")
             .setPort(14254)
             .setDeadline(1_000)
+            .setSampler(Samplers.alwaysOff())
             .build()
           )
           .addExporter(LoggingExporter
