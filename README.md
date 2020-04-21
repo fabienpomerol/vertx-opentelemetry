@@ -2,7 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/fabienpomerol/vertx-opentelemetry.svg?style=shield)](https://app.circleci.com/pipelines/github/fabienpomerol/vertx-opentelemetry)
 
-Based on the OpenTelemetry Java SDK : https://github.com/open-telemetry/opentelemetry-java
+Based on the OpenTelemetry Java SDK : https://github.com/open-telemetry/opentelemetry-java and inspired by https://github.com/eclipse-vertx/vertx-tracing
 
 Supported exporter :
 
