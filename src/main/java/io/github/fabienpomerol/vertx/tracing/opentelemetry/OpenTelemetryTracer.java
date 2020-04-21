@@ -26,7 +26,7 @@ import java.util.stream.StreamSupport;
 public class OpenTelemetryTracer implements io.vertx.core.spi.tracing.VertxTracer<Span, Span> {
 
   /**
-   * Instantiate an OpenTelemtry tracer
+   * Instantiate an OpenTelemetry tracer
    */
   static Tracer createDefaultTracer() {
     return OpenTelemetry.getTracerProvider().get("io.vertx.tracing.opentelemetry.OpenTelemetryTracer");
