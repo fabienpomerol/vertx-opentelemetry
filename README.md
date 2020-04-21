@@ -15,6 +15,27 @@ Supported exporter :
 
 ## Usage
 
+Add the following dependency to your pom.xml
+
+```xml
+<repositories>
+  <repository>
+    <id>oss.sonatype.org-snapshot</id>
+    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+  </repository>
+</repositories>
+
+<dependencies>
+  ...
+  <dependency>
+    <groupId>io.github.fabienpomerol</groupId>
+    <artifactId>vertx-opentelemetry</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+  </dependency>
+  ...
+</dependencies>
+```
+
 ```java
 Vertx vertx = Vertx.vertx(new VertxOptions()
   .setTracingOptions(
