@@ -13,11 +13,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(VertxUnitRunner.class)
 public class OpenTelemetryTest {
@@ -101,11 +101,42 @@ public class OpenTelemetryTest {
     responseLatch.awaitSuccess();
     List<SpanData> spans = waitUntil(3);
     SpanData spanData = spans.get(0);
+
     assertSingleTrace(spans);
     assertEquals("GET", spanData.getName());
     assertEquals("GET", spanData.getAttributes().get("http.method").getStringValue());
     assertEquals("http://localhost:8081/", spanData.getAttributes().get("http.url").getStringValue());
     assertEquals("200", spanData.getAttributes().get("http.status_code").getStringValue());
+  }
+
+  @Test
+  public void testSpanHierarchy(TestContext ctx) throws Exception {
+    Async listenLatch = ctx.async(2);
+    HttpClient c = vertx.createHttpClient();
+    vertx.createHttpServer().requestHandler(req -> {
+      c.get(8081, "localhost", "/", ctx.asyncAssertSuccess(resp -> {
+        req.response().end();
+      }));
+    }).listen(8080, ctx.asyncAssertSuccess(v -> listenLatch.countDown()));
+    vertx.createHttpServer().requestHandler(req -> {
+      req.response().end();
+    }).listen(8081, ctx.asyncAssertSuccess(v -> listenLatch.countDown()));
+    listenLatch.awaitSuccess();
+    Async responseLatch = ctx.async();
+    HttpClient client = vertx.createHttpClient();
+    client.get(8080, "localhost", "/", ctx.asyncAssertSuccess(resp ->{
+      responseLatch.complete();
+    }));
+    responseLatch.awaitSuccess();
+    List<SpanData> spans = waitUntil(3);
+
+    assertSingleTrace(spans);
+    assertEquals(spans.get(2).getSpanId(), spans.get(0).getParentSpanId());
+    assertTrue(spans.get(0).getHasRemoteParent());
+    assertEquals(new SpanId(0), spans.get(1).getParentSpanId());
+    assertFalse(spans.get(1).getHasRemoteParent());
+    assertEquals(spans.get(1).getSpanId(), spans.get(2).getParentSpanId());
+    assertFalse(spans.get(2).getHasRemoteParent());
   }
 
   @Test
