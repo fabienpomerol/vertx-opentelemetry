@@ -7,3 +7,9 @@ workflows:
   maven_test:
     jobs:
       - maven/test # checkout, build, test, and upload test results
+
+deployment:
+  main:
+    branch: feature/circleci-deploy
+    commands:
+      - mvn -s .circleci.settings.xml -DskipTests deploy
