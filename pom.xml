@@ -34,7 +34,7 @@
     <opentelemetry.version>0.3.0</opentelemetry.version>
     <grpc.protobuf.version>1.24.0</grpc.protobuf.version>
     <logback.version>1.2.3</logback.version>
-    <log4j2.version>2.11.1</log4j2.version>
+    <log4j2.version>2.15.0</log4j2.version>
     <doc.skip>false</doc.skip>
   </properties>
 
